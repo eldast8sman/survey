@@ -10,7 +10,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        /** @var Illuminate\Validation\Rules\Password */
         $data = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|string|unique:users,email',
@@ -21,13 +20,16 @@ class AuthController extends Controller
             ]
         ]);
 
-        /**
-         * @var App\Models\User
-        */
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password'])
+        ]);
+        $token = $user->createToken('main')->plainTextToken;
+
+        return response([
+            'user' => $user,
+            'token' => $token
         ]);
     }
 }
