@@ -9,7 +9,7 @@
             <router-link :to="{name: 'Register'}" class="font-medium text-indigo-600 hover:text-indigo-500"> Register for Free </router-link>
             </p>
         </div>
-        <form class="mt-8 space-y-6" action="#" method="POST">
+        <form class="mt-8 space-y-6" @submit="login">
             <input type="hidden" name="remember" value="true" />
             <div class="rounded-md shadow-sm -space-y-px">
             <div>
@@ -49,7 +49,7 @@
 <script setup>
 import { LockClosedIcon } from '@heroicons/vue/solid'
 import store from "../store";
-import useRouter from "vue-router";
+import {useRouter} from "vue-router";
 
 const router = useRouter();
 
@@ -62,11 +62,12 @@ const user = {
 function login(ev){
   ev.preventDefault();
 
-  store.dispatch('login', user)
-      .then(() => {
-        router.push({
-          name: 'Dashboard'
-        })
-      })
+ store
+    .dispatch("login", user)
+    .then(() => {
+      router.push({
+        name: "Dashboard",
+      });
+    })
 }
 </script>
