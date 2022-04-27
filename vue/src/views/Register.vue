@@ -66,11 +66,11 @@ const user = {
 function register(ev){
   ev.preventDefault();
   store
-      .dispatch('register', user)
-      .then(() => {
-        router.push({
-          name: 'Dashboard'
-        })
+    .dispatch('register', user)
+    .then(() => {
+      router.push({
+        name: 'Dashboard'
       })
+    })
 }
 </script>
