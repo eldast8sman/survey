@@ -37,9 +37,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email|string|exists:users,email',
+            'email' => 'required|email|string|exists:user,email',
             'password' => [
-                'required'
+                'required',
             ],
             'remember' => 'boolean'
         ]);
@@ -48,16 +48,14 @@ class AuthController extends Controller
 
         if(!Auth::attempt($credentials, $remember)){
             return response([
-                'error' => 'The provided credentials are not correct'
+                'error' => 'The Provided credentials are not correct'
             ], 422);
         }
-
         $user = Auth::user();
-        $token = $user->createToken('main')->plainTexToken;
-
+        $token = $user->createToken('main')->plainTextToken;
         return response([
             'user' => $user,
             'token' => $token
-        ]);
+        ])
     }
 }
