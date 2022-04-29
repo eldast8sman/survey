@@ -9,7 +9,7 @@
             <router-link :to="{name: 'Register'}" class="font-medium text-indigo-600 hover:text-indigo-500"> Register for Free </router-link>
             </p>
         </div>
-        <form class="mt-8 space-y-6">
+        <form class="mt-8 space-y-6" @submit="login">
             <input type="hidden" name="remember" value="true" />
             <div class="rounded-md shadow-sm -space-y-px">
             <div>
