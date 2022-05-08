@@ -105,6 +105,19 @@
                 >
                     Select Question Type
                 </label>
+                <select
+                    id="question_type"
+                    name="question_type"
+                    v-model="model.type"
+                    @change="typeChange"
+                    class="
+
+                    "
+                >
+                    <option v-for="type in questionTypes" :key="type" :value="type">
+                        {{ upperCaseFirst(type) }}
+                    </option>
+                </select>
             </div>
             <!--/Question Type-->
         </div>
