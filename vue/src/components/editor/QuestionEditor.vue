@@ -211,7 +211,7 @@
                 </div>
                 <!--Option List-->
                 <div
-                    v-for="(option, index) in mode.data.options"
+                    v-for="(option, index) in model.data.options"
                     :key="option.uuid"
                     class="flex items-center mb-1"
                 >
@@ -233,7 +233,7 @@
                     <!--Delete Option-->
                     <button
                         type="button"
-                        @click="removeOptions(option)"
+                        @click="removeOption(option)"
                         class="
                             h-6
                             w-6
@@ -266,7 +266,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { v4 as uuidv4 } from "uuid";
+import store from "../../store";
 
 const props = defineProps({
     question: Object,
@@ -277,6 +279,54 @@ const emit = defineEmits(["change", "addQuestion", "deleteQuestion"]);
 
 //Re-create the whole question data to avoid unintentional reference change
 const model = ref(JSON.parse(JSON.stringify(props.question)));
+
+//Get question types from vuex
+const questionTypes = computed(() => store.state.questionTypes);
+
+function upperCaseFirst(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function shouldHaveOptions() {
+    return ["select", "radio", "checkbox"].includes(model.value.type);
+}
+
+function getOptions() {
+    return model.value.data.options
+}
+function setOptions(options){
+    model.value.data.options = options;
+}
+
+function addOption() {
+    setOptions([
+        ...getOptions(),
+        { uuid: uuidv4(), text: "" },
+    ]);
+    dataChange();
+}
+
+function removeOption(op) {
+    setOptions(getOptions().filter((opt) => opt !== op));
+    dataChange();
+}
+
+function typeChange() {
+    if(shouldHaveOptions()) {
+        setOptions(getOptions() || []);
+    }
+    dataChange();
+}
+
+//Emit the data change
+function dataChange(){
+    const data = JSON.parse(JSON.stringify(model.value));
+    if(!shouldHaveOptions()) {
+        delete data.data.options;
+    }
+
+    emit("change", data);
+}
 
 </script>
 
